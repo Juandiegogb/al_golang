@@ -1,0 +1,6 @@
+{
+    "files.exclude": {
+       "**/.terraform":true,
+       "**/*.lock.hcl":true
+    }
+}
