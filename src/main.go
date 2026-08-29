@@ -75,9 +75,10 @@ func initDB() (*sql.DB, error) {
 	return db, nil
 }
 
-type Country struct {
-	Id   int
-	Name string
+type Activity struct {
+	Id           int
+	ActivityType string
+	UnitId       int
 }
 
 var db *sql.DB
@@ -87,19 +88,23 @@ func init() {
 }
 
 func handler(r events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
+	unitId, ok := r.QueryStringParameters["unit_id"]
+	if !ok {
+		return events.APIGatewayV2HTTPResponse{StatusCode: http.StatusInternalServerError, Body: "unit_id is required"}, nil
+	}
 	db, err := initDB()
 	if err != nil {
 		log.Fatalf("Application startup failed: %v", err)
 	}
 	defer db.Close()
-	rows, err := db.Query("select id,name from app_country")
+	rows, err := db.Query("select sa.id,sa.activity_type,ap.unit_id from app_scheduledactivity sa left join app_activityplan ap on sa.activityplan_id = ap.id where ap.unit_id = $1", unitId)
 	if err != nil {
 		return events.APIGatewayV2HTTPResponse{}, err
 	}
-	var countries []Country
+	var countries []Activity
 	for rows.Next() {
-		var c Country
-		if err := rows.Scan(&c.Id, &c.Name); err != nil {
+		var c Activity
+		if err := rows.Scan(&c.Id, &c.ActivityType, &c.UnitId); err != nil {
 			return events.APIGatewayV2HTTPResponse{}, err
 		}
 		countries = append(countries, c)
