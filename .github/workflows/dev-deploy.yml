@@ -4,20 +4,21 @@ on: push
 jobs:
   build-job:
     runs-on: ubuntu-24.04-arm
-    container:
-      image: golang:1.26
     steps:
       - uses: actions/checkout@v5
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+          cache-dependency-path: src/go.sum
       - working-directory: src
         run: CGO_ENABLED=0 GOARCH=arm64 go build -tags lambda.norpc -o bootstrap main.go
   
   deploy-job:
     needs: build-job
     runs-on: ubuntu-24.04
-    container: 
-      image: hashicorp/terraform
     steps:
       - uses: actions/checkout@v5
+      - uses: hashicorp/setup-terraform@v3
       - run: ls
       - working-directory: terraform
         run: | 
