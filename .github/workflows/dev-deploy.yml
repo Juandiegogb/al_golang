@@ -7,5 +7,7 @@ jobs:
     container:
       image: golang:1.26
     steps:
+      - run: ls
+      - run: go version
       - uses: actions/checkout@v4
       - run: ls
