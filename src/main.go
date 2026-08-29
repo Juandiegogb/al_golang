@@ -76,9 +76,9 @@ func initDB() (*sql.DB, error) {
 }
 
 type Activity struct {
-	Id           int
-	ActivityType string
-	UnitId       int
+	Id           int    `json:"id"`
+	ActivityType string `json:"activity_type"`
+	UnitId       int    `json:"unid_id"`
 }
 
 var db *sql.DB
@@ -97,7 +97,7 @@ func handler(r events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse,
 		log.Fatalf("Application startup failed: %v", err)
 	}
 	defer db.Close()
-	rows, err := db.Query("select sa.id,sa.activity_type,ap.unit_id from app_scheduledactivity sa left join app_activityplan ap on sa.activityplan_id = ap.id where ap.unit_id = $1", unitId)
+	rows, err := db.Query("select sa.id,sa.activity_type,ap.unit_id from app_scheduledactivity sa left join app_activityplan ap on sa.activity_plan_id = ap.id where ap.unit_id = $1", unitId)
 	if err != nil {
 		return events.APIGatewayV2HTTPResponse{}, err
 	}
