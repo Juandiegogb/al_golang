@@ -1,0 +1,11 @@
+name: dev-deploy
+on: push
+
+jobs:
+  build-job:
+    runs-on: ubuntu-24.04-arm
+    container:
+      image: golang:1.26
+    steps:
+      - uses: actions/checkout@v4
+      - run: ls
