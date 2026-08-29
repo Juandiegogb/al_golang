@@ -7,7 +7,17 @@ jobs:
     container:
       image: golang:1.26
     steps:
+      - uses: actions/checkout@v5
+      - working-directory: src
+        run: CGO_ENABLED=0 GOARCH=arm64 go build -tags lambda.norpc -o bootstrap main.go
+  
+  deploy-job:
+    runs-on: ubuntu-24.04-arm
+    container: 
+      image: hashicorp/terraform
+    steps:
       - run: ls
-      - run: go version
-      - uses: actions/checkout@v4
-      - run: ls
+      - working-directory: terraform
+        run: | 
+          terraform init
+          terraform plan
