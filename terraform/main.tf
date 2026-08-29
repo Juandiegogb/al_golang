@@ -52,12 +52,13 @@ data "archive_file" "zip" {
 }
 
 resource "aws_lambda_function" "utils_function" {
-  function_name = "utils_lambda_function"
-  architectures = ["arm64"]
-  role          = aws_iam_role.example.arn
-  filename      = data.archive_file.zip.output_path
-  runtime       = "provided.al2023"
-  handler       = "main.handler"
+  function_name    = "utils_lambda_function"
+  architectures    = ["arm64"]
+  role             = aws_iam_role.example.arn
+  filename         = data.archive_file.zip.output_path
+  runtime          = "provided.al2023"
+  handler          = "main.handler"
+  source_code_hash = data.archive_file.zip.output_base64sha256
 }
 
 resource "aws_lambda_function_url" "function_url" {
