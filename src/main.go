@@ -9,7 +9,7 @@ import (
 
 func handler(r events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	fmt.Println(r)
-	return events.APIGatewayProxyResponse{StatusCode: 200, Body: "hola"}, nil
+	return events.APIGatewayProxyResponse{StatusCode: 200, Body: "hola como estas"}, nil
 }
 
 func main() {
