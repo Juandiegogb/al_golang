@@ -83,15 +83,15 @@ type Country struct {
 var db *sql.DB
 
 func init() {
-	var err error
-	db, err = initDB()
+
+}
+
+func handler(r events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
+	db, err := initDB()
 	if err != nil {
 		log.Fatalf("Application startup failed: %v", err)
 	}
 	defer db.Close()
-}
-
-func handler(r events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
 	rows, err := db.Query("select id,name from app_country")
 	if err != nil {
 		return events.APIGatewayV2HTTPResponse{}, err
@@ -115,7 +115,6 @@ func handler(r events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse,
 		return events.APIGatewayV2HTTPResponse{StatusCode: http.StatusInternalServerError, Body: "Internal error"}, err
 	}
 	return events.APIGatewayV2HTTPResponse{StatusCode: 200, Body: string(data)}, nil
-
 }
 
 func main() {
