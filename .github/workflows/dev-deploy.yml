@@ -28,6 +28,7 @@ jobs:
         with:
           name: go-binary
       - run: ls
+      - run: mv bootstrap terraform/bootstrap
       - name: test 
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
