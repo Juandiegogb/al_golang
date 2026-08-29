@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -31,7 +31,7 @@ func handler(r events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, e
 	default:
 		response = events.APIGatewayProxyResponse{StatusCode: 404, Body: "Not found"}
 	}
-	fmt.Println(r)
+	log.Println(r.Path)
 	return response, nil
 }
 
