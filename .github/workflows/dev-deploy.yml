@@ -12,10 +12,12 @@ jobs:
         run: CGO_ENABLED=0 GOARCH=arm64 go build -tags lambda.norpc -o bootstrap main.go
   
   deploy-job:
+    needs: build-job
     runs-on: ubuntu-24.04-arm
     container: 
       image: hashicorp/terraform
     steps:
+      - uses: actions/checkout@v5
       - run: ls
       - working-directory: terraform
         run: | 
