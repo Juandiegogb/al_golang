@@ -12,6 +12,11 @@ jobs:
           cache-dependency-path: src/go.sum
       - working-directory: src
         run: CGO_ENABLED=0 GOARCH=arm64 go build -tags lambda.norpc -o bootstrap main.go
+      - uses: actions/upload-artifact@v4
+        with:
+          name: go-binary
+          path: src/bootstrap
+        
   
   deploy-job:
     needs: build-job
@@ -19,6 +24,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: hashicorp/setup-terraform@v3
+      - uses: actions/download-artifact@v4
+        with:
+          name: go-binary
       - run: ls
       - name: test 
         env:
