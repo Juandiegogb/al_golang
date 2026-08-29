@@ -36,6 +36,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         working-directory: terraform
         run: | 
+          env
           terraform init
           terraform plan
-          terraform apply
+          terraform apply -auto-approve
